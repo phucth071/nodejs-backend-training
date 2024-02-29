@@ -3,23 +3,27 @@ const app = express();
 
 
 const { default: helmet } = require('helmet');
+const compression = require('compression');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
-
+require('dotenv').config();
 // Init Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(morgan('dev')); // morgan: dev, combined, common, short, tiny
+// app.use(helmet());
+// app.use(compression());
 
-// morgan: dev, combined, common, short, tiny
-app.use(morgan('dev'));
-app.use(helmet());
 
 // Init db
+require('./dbs/init.mongodb');
+// const { checkOverLoad } = require('./helpers/check.connect');
+// checkOverLoad();
 
 // Routes
-app.get('/', (req, res, next) => {
-    return res.status(200).json({
-        message: 'Server is running'
-    });
-});
+app.use('', require('./routes/index'));
+
 // Handling error
 
 
