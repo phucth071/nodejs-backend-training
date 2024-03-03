@@ -53,4 +53,10 @@ const permissions = (permissions) => {
     }
 }
 
-module.exports = { apiKey, permissions };
+const asyncMiddleware = (fn) => {
+    return (req, res, next) => {
+        fn(req, res, next).catch(next);
+    }
+}
+
+module.exports = { apiKey, permissions, asyncMiddleware };
