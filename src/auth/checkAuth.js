@@ -5,31 +5,29 @@ const HEADERS = {
     AUTHORIZATION: 'authorization'
 }
     
+const { ForbiddenError } = require('../core/error.response');
+const { asyncHandler } = require('../helpers/asyncHandler');
 const { findById } = require('../services/apikey.service');
 
-const apiKey = async(req, res, next) => {
+const apiKey = asyncHandler(async(req, res, next) => {
     try {
         const key = req.headers[HEADERS.API_KEY]?.toString();
         if (!key) {
-            return res.status(403).json({
-                message: 'Forbidden Error'
-            });
+            throw new ForbiddenError('Forbidden Error');
         }
         // check objkey
         const objkey = await findById(key);
         if (!objkey) {
-            return res.status(403).json({
-                message: 'Forbidden Error'
-            });
+            throw new ForbiddenError('Forbidden Error');
         }
 
         req.objkey = objkey;
         return next()
     
     } catch (error) {
-        
+        throw error
     }
-}
+})
 
 const permissions = (permissions) => {
     return (req, res, next) => {
@@ -53,10 +51,4 @@ const permissions = (permissions) => {
     }
 }
 
-const asyncMiddleware = (fn) => {
-    return (req, res, next) => {
-        fn(req, res, next).catch(next);
-    }
-}
-
-module.exports = { apiKey, permissions, asyncMiddleware };
+module.exports = { apiKey, permissions };

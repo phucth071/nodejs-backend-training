@@ -16,11 +16,13 @@ class Database {
     connect(type = 'mongodb') {
         
         if (1 === 1) {
-            mongoose.set('debug', true);
-            mongoose.set('debug', {color: true});
+            mongoose.set('debug', false);
+            mongoose.set('debug', {color: false});
         }
 
         mongoose.connect(connectString, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
             maxPoolSize: 50
         }).then(() => {
             console.log('Connected to MongoDB');

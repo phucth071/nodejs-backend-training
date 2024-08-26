@@ -30,7 +30,7 @@ const checkOverLoad = () => {
             process.exit(1);
         }
 
-    }, _SECOND); // Monitoring every 5 seconds
+    }, _SECOND);
 }
 
 module.exports = { countConnect, checkOverLoad }
